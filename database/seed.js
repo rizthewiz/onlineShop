@@ -1,4 +1,4 @@
-const { client } = require("./");
+const { client } = require(".");
 
 const categories = [
   { name: "His Pleasure", category_id: 1 },
