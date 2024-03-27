@@ -16,6 +16,15 @@ const getUsers = async () => {
   return response.rows;
 };
 
+const getSingleUser = async (id) => {
+  const SQL = `
+    SELECT * FROM users WHERE id = $1;
+    `;
+
+  const response = await client.query(SQL, [id]);
+  return response.rows[0];
+};
+
 const getProducts = async () => {
   const SQL = `
     SELECT * FROM products;
@@ -55,5 +64,74 @@ const insertProduct = async (title, price, quantity, image, category_name) => {
   ]);
   return response.rows[0];
 };
+// below needs testing
 
-module.exports = { client, getUsers, getProducts, insertUser, insertProduct };
+const insertCatergory = async (name, category_id) => {
+  const SQL = `
+  INSERT INTO categories(name, category_id) VALUES($1, $2)
+  RETURNING *`;
+
+  const response = await client.query(SQL, [name, category_id]);
+  return response.rows[0];
+};
+
+const getCategories = async () => {
+  const SQL = `
+    SELECT * FROM categories;
+    `;
+
+  const response = await client.query(SQL);
+  return response.rows;
+};
+
+const removeCategory = async (id) => {
+  const SQL = `
+        DELETE FROM categories
+        WHERE id = $1`;
+
+  const response = await client.query(SQL, [id]);
+  return true;
+};
+
+const removeProduct = async (id) => {
+  const SQL = `
+        DELETE FROM products
+        WHERE id = $1`;
+
+  const response = await client.query(SQL, [id]);
+  return true;
+};
+
+const getSingleProduct = async (id) => {
+  const SQL = `
+    SELECT * FROM products WHERE id = $1;
+    `;
+
+  const response = await client.query(SQL, [id]);
+  return response.rows[0];
+};
+
+const updateCategory = async (name, category_id) => {
+  const SQL = `UPDATE categories
+  SET name=$1
+  WHERE category_id=$2
+  RETURNING *`;
+
+  const response = await client.query(SQL, [name, category_id]);
+  return response.rows[0];
+};
+
+module.exports = {
+  client,
+  getCategories,
+  getUsers,
+  getProducts,
+  insertUser,
+  insertCatergory,
+  insertProduct,
+  getSingleUser,
+  getSingleProduct,
+  removeCategory,
+  removeProduct,
+  updateCategory,
+};
