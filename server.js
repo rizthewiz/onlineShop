@@ -5,11 +5,11 @@ const api = require("./api");
 const port = 3000;
 
 const app = express();
-app.use(requires("morgan"), "dev");
+app.use(require("morgan")("dev"));
 app.use(express.json());
 app.use("/api", api);
 app.use((err, req, res, next) => {
-  res.status(500).send({ error: "Something is wrong" });
+  res.status(500).send({ error: err });
 });
 
 const init = async () => {

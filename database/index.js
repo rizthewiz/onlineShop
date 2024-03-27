@@ -27,19 +27,32 @@ const getProducts = async () => {
 
 const insertUser = async (firstName, lastName, email, password, address) => {
   const SQL = `
-      INSERT INTO users(firstName, lastName, email, password, address) VALUES($1, $2, $3, $4, $5))
+      INSERT INTO users(firstName, lastName, email, password, address) VALUES($1, $2, $3, $4, $5)
       RETURNING *`;
 
-  const response = await client.query(SQL, [name, department_name]);
+  const response = await client.query(SQL, [
+    firstName,
+    lastName,
+    email,
+    password,
+    address,
+  ]);
+  console.log(response);
   return response.rows[0];
 };
 
 const insertProduct = async (title, price, quantity, image, category_name) => {
   const SQL = `
-      INSERT INTO products(title, price, quantity, image, category_id) VALUES($1, $2, $3, $4(SELECT id FROM categories WHERE name = $5))
+      INSERT INTO products(title, price, quantity, image, category_id) VALUES($1, $2, $3, $4,(SELECT category_id FROM categories WHERE name = $5))
       RETURNING *`;
 
-  const response = await client.query(SQL, [name, department_name]);
+  const response = await client.query(SQL, [
+    title,
+    price,
+    quantity,
+    image,
+    category_name,
+  ]);
   return response.rows[0];
 };
 
