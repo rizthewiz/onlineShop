@@ -60,7 +60,7 @@ router.post("/users", async (req, res, next) => {
 });
 
 // Admin Route
-router.post("/products", async (req, res, next) => {
+router.post("/products/", async (req, res, next) => {
   try {
     const product = await db.insertProduct(
       req.body.title,
@@ -69,19 +69,24 @@ router.post("/products", async (req, res, next) => {
       req.body.image,
       req.body.category_name
     );
+
     res.send(product);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
 
-// Admin Route
+// Admin Route WARNING WILL DELETE ALL PRODUCTS IN CATEGORY
 router.delete("/categories/:id", async (req, res, next) => {
+  console.log("req", req.params.id);
   try {
     const categories = await db.removeCategory(req.params.id);
+    console.log(res);
     res.sendStatus(204);
     console.log(`Sucessfully Removed Category`);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
@@ -100,7 +105,7 @@ router.delete("/products/:id", async (req, res, next) => {
 // Admin Route
 router.post("/categories", async (req, res, next) => {
   try {
-    const category = await db.insertCatergory(req.body.name);
+    const category = await db.insertCategory(req.body.name);
     res.send(category);
   } catch (error) {
     next(error);
@@ -116,12 +121,31 @@ router.get("/categories", async (req, res, next) => {
   }
 });
 
-// Admin Route unfinished
+// Admin Route
 router.put("/categories/:id", async (req, res, next) => {
   try {
-    const category = await db.insertCatergory(req.params.id);
+    const category = await db.updateCategory(req.body.name, req.params.id);
     res.send(category);
   } catch (error) {
+    next(error);
+  }
+});
+
+// Admin Route
+router.put("/products/:id", async (req, res, next) => {
+  try {
+    const product = await db.updateProduct(
+      req.body.title,
+      req.body.price,
+      req.body.quantity,
+      req.body.image,
+      req.body.category_name,
+      req.params.id
+    );
+
+    res.send(product);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 });

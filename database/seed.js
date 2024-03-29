@@ -1,11 +1,11 @@
 const { client } = require(".");
 
 const categories = [
-  { name: "His Pleasure", category_id: 1 },
-  { name: "Her Pleasure", category_id: 2 },
-  { name: "Couples", category_id: 3 },
-  { name: "Lubricants", category_id: 4 },
-  { name: "Games", category_id: 5 },
+  { name: "His Pleasure" },
+  { name: "Her Pleasure" },
+  { name: "Couples" },
+  { name: "Lubricants" },
+  { name: "Games" },
 ];
 
 const dummyUsers = [
@@ -116,7 +116,7 @@ const createTables = async () => {
             image VARCHAR(255),
             created_at TIMESTAMP DEFAULT now(),
             updated_at TIMESTAMP DEFAULT now(),
-            category_id INTEGER REFERENCES categories(category_id) NOT NULL
+            category_id INTEGER REFERENCES categories(category_id) ON DELETE CASCADE
           );
       `;
 
@@ -149,16 +149,13 @@ const seedUsers = async () => {
 
 const seedCategories = async () => {
   const queryParams = categories
-    .map((category, i) => `($${i * 2 + 1}, $${i * 2 + 2})`)
+    .map((category, i) => `($${i * 1 + 1})`)
     .join(",");
 
-  const values = categories.flatMap((category) => [
-    category.name,
-    category.category_id,
-  ]);
+  const values = categories.flatMap((category) => [category.name]);
 
   const SQL = `
-      INSERT INTO categories(name, category_id) VALUES${queryParams}`;
+      INSERT INTO categories(name) VALUES${queryParams} `;
 
   await client.query(SQL, values);
 };

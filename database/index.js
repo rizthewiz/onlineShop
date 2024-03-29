@@ -54,7 +54,7 @@ const insertProduct = async (title, price, quantity, image, category_name) => {
   const SQL = `
       INSERT INTO products(title, price, quantity, image, category_id) VALUES($1, $2, $3, $4,(SELECT category_id FROM categories WHERE name = $5))
       RETURNING *`;
-
+  console.log("run");
   const response = await client.query(SQL, [
     title,
     price,
@@ -62,16 +62,16 @@ const insertProduct = async (title, price, quantity, image, category_name) => {
     image,
     category_name,
   ]);
+  console.log(response);
   return response.rows[0];
 };
-// below needs testing
 
-const insertCatergory = async (name, category_id) => {
+const insertCategory = async (name) => {
   const SQL = `
-  INSERT INTO categories(name, category_id) VALUES($1, $2)
+  INSERT INTO categories(name) VALUES($1)
   RETURNING *`;
 
-  const response = await client.query(SQL, [name, category_id]);
+  const response = await client.query(SQL, [name]);
   return response.rows[0];
 };
 
@@ -85,9 +85,10 @@ const getCategories = async () => {
 };
 
 const removeCategory = async (id) => {
+  console.log(id);
   const SQL = `
         DELETE FROM categories
-        WHERE id = $1`;
+        WHERE category_id = $1`;
 
   const response = await client.query(SQL, [id]);
   return true;
@@ -121,17 +122,42 @@ const updateCategory = async (name, category_id) => {
   return response.rows[0];
 };
 
+const updateProduct = async (
+  title,
+  price,
+  quantity,
+  image,
+  category_name,
+  id
+) => {
+  const SQL = `UPDATE products
+  SET title=$1, price=$2, quantity=$3, image=$4, category_id=(SELECT category_id FROM categories WHERE name = $5) 
+  WHERE id=$6
+  RETURNING *`;
+
+  const response = await client.query(SQL, [
+    title,
+    price,
+    quantity,
+    image,
+    category_name,
+    id,
+  ]);
+  return response.rows[0];
+};
+
 module.exports = {
   client,
   getCategories,
   getUsers,
   getProducts,
   insertUser,
-  insertCatergory,
+  insertCategory,
   insertProduct,
   getSingleUser,
   getSingleProduct,
   removeCategory,
   removeProduct,
   updateCategory,
+  updateProduct,
 };
