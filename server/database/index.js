@@ -48,7 +48,7 @@ const insertUser = async (firstName, lastName, email, password, address) => {
     await bcrypt.hash(password, 5),
     address,
   ]);
-  console.log(response);
+  console.log(response.rows[0]);
   return response.rows[0];
 };
 
