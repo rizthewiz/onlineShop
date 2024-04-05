@@ -17,7 +17,7 @@ function Navigation({ token, setToken, user }) {
             nav("/login");
           }}
         >
-          Log Out {user}
+          Log Out {user}!
         </button>
       ) : (
         <>
