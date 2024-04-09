@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-function Login({ setToken, user, setUser }) {
+function Login({ setToken, setName }) {
+  const [user, setUser] = useState({ email: "", password: "" });
+
   const nav = useNavigate();
   const route = "api/users/login";
 
@@ -21,7 +24,8 @@ function Login({ setToken, user, setUser }) {
         .then(function (response) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
-          setUser(response.data.name);
+          setName(response.data.name);
+          console.log(response.data);
           nav("/");
         })
         .catch(function (error) {

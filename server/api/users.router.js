@@ -7,6 +7,30 @@ const SECRET = process.env.SECRET || "funny lemon Ops";
 
 const router = express.Router();
 
+router.post("/:id/cart", async (req, res, next) => {
+  // get cartid by userid
+  try {
+    const cart = await db.getCartByUserId(req.params.id);
+    const { product_id, quantity } = req.body;
+    //get title, price, image from products table where the product id is equal to product_id
+    //use product information to create and insert a new cart item
+    //return created cart item in response
+    const productInfo = await db.getSingleProduct(product_id);
+    console.log(productInfo);
+    const cartItem = await db.insertCartItem(
+      cart.id,
+      product_id,
+      productInfo.title,
+      productInfo.price,
+      productInfo.image,
+      quantity
+    );
+    res.send(cartItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Admin Route
 router.get("/", async (req, res, next) => {
   try {
@@ -28,6 +52,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/register", async (req, res, next) => {
   try {
+    // create cart for user
     const user = await db.insertUser(
       req.body.firstName,
       req.body.lastName,

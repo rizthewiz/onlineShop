@@ -3,11 +3,13 @@ const db = require("../database");
 
 const userRouter = require("./users.router");
 const productRouter = require("./products.router");
+// const cartRouter = require("./cart.router");
 
 const router = express.Router();
 
 router.use("/users", userRouter);
 router.use("/products", productRouter);
+// router.use("/users/:id/cart", cartRouter);
 
 // Admin Route WARNING WILL DELETE ALL PRODUCTS IN CATEGORY
 router.delete("/categories/:id", async (req, res, next) => {

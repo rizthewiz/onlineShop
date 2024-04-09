@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Navigation({ token, setToken, user }) {
+function Navigation({ token, setToken, name }) {
   const nav = useNavigate();
 
   return (
     <div>
+      {token && <h2>Welcome, {name}! </h2>}
       <button onClick={() => nav("/")}> Home </button>
       Other otions here
       {token ? (
@@ -17,7 +18,7 @@ function Navigation({ token, setToken, user }) {
             nav("/login");
           }}
         >
-          Log Out {user}!
+          Log Out
         </button>
       ) : (
         <>

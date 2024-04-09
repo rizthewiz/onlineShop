@@ -80,7 +80,9 @@ const dummyProducts = [
 
 const deleteTables = async () => {
   const SQL = `
-      DROP TABLE IF EXISTS products;
+    DROP TABLE IF EXISTS cartItems;
+    DROP TABLE IF EXISTS carts;
+    DROP TABLE IF EXISTS products;
     DROP TABLE IF EXISTS categories;
     DROP TABLE IF EXISTS users;
     `;
@@ -88,7 +90,6 @@ const deleteTables = async () => {
 };
 
 const createTables = async () => {
-  //   cart [] added to user? if yes then cart table needs to be created after everything else referencing user and product tables
   const SQL = `
   CREATE TABLE users(
     id serial PRIMARY KEY,
@@ -118,8 +119,33 @@ const createTables = async () => {
             created_at TIMESTAMP DEFAULT now(),
             updated_at TIMESTAMP DEFAULT now(),
             category_id INTEGER REFERENCES categories(category_id) ON DELETE CASCADE
-          );
-      `;
+          );   `;
+
+  await client.query(SQL);
+};
+
+const createCartTables = async () => {
+  const SQL = `CREATE TABLE carts(
+    id serial PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id)
+    );
+
+CREATE TABLE cartItems(
+id serial PRIMARY KEY,
+cart_id INT REFERENCES carts(id),
+product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+product_title VARCHAR(40) NOT NULL,
+product_price INTEGER NOT NULL,
+product_image VARCHAR(255),
+quantity INTEGER NOT NULL DEFAULT(1)
+); `;
+
+  await client.query(SQL);
+};
+
+const seedCart = async () => {
+  const SQL = `
+  INSERT INTO carts(user_id) VALUES(1)`;
 
   await client.query(SQL);
 };
@@ -191,10 +217,14 @@ module.exports = async () => {
   console.log(`deleted tables`);
   await createTables();
   console.log(`created tables`);
+  await createCartTables();
+  console.log("cart tables created");
   await seedUsers();
   console.log(`seeded users`);
   await seedCategories();
   console.log(`seeded categories`);
   await seedProducts();
   console.log(`seeded products`);
+  await seedCart();
+  console.log("cart seeded");
 };

@@ -158,6 +158,40 @@ const updateProduct = async (
   return response.rows[0];
 };
 
+const getCartByUserId = async (id) => {
+  const SQL = `
+  SELECT id FROM carts
+  WHERE user_id = $1;`;
+
+  const response = await client.query(SQL, [id]);
+  console.log(response.rows[0]);
+  return response.rows[0];
+};
+
+const insertCartItem = async (
+  cart_id,
+  product_id,
+  title,
+  price,
+  image,
+  quantity
+) => {
+  const SQL = `
+  INSERT INTO cartItems(cart_id, product_id, product_title, product_price, product_image, quantity) VALUES($1, $2, $3, $4, $5, $6)
+  RETURNING*`;
+
+  const response = await client.query(SQL, [
+    cart_id,
+    product_id,
+    title,
+    price,
+    image,
+    quantity,
+  ]);
+  console.log(response.rows);
+  return response.rows[0];
+};
+
 module.exports = {
   client,
   getCategories,
@@ -173,4 +207,6 @@ module.exports = {
   removeProduct,
   updateCategory,
   updateProduct,
+  getCartByUserId,
+  insertCartItem,
 };

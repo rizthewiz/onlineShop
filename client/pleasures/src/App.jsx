@@ -5,20 +5,22 @@ import Navigation from "./components/Navigation";
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import ItemDetails from "./components/ItemDetails";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState({ email: "", password: "" });
+  const [name, setName] = useState(null);
 
   return (
     <>
-      <Navigation token={token} setToken={setToken} user={user} />
+      <Navigation token={token} setToken={setToken} name={name} />
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/:id" element={<ItemDetails />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route
           path="/login"
-          element={<Login setToken={setToken} user={user} setUser={setUser} />}
+          element={<Login setToken={setToken} setName={setName} />}
         ></Route>
       </Routes>
     </>
