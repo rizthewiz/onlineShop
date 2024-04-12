@@ -11,15 +11,18 @@ function Navigation({ token, setToken, name }) {
       <button onClick={() => nav("/")}> Home </button>
       Other otions here
       {token ? (
-        <button
-          onClick={() => {
-            setToken(null);
-            localStorage.clear();
-            nav("/login");
-          }}
-        >
-          Log Out
-        </button>
+        <>
+          <button onClick={() => nav("/cart")}>View Cart</button>
+          <button
+            onClick={() => {
+              setToken(null);
+              localStorage.clear();
+              nav("/login");
+            }}
+          >
+            Log Out
+          </button>
+        </>
       ) : (
         <>
           <button onClick={() => nav("/login")}> Log In </button>

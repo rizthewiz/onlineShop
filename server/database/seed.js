@@ -145,7 +145,11 @@ quantity INTEGER NOT NULL DEFAULT(1)
 
 const seedCart = async () => {
   const SQL = `
-  INSERT INTO carts(user_id) VALUES(1)`;
+  INSERT INTO carts(user_id) VALUES(1);
+  INSERT INTO carts(user_id) VALUES(2);
+  INSERT INTO carts(user_id) VALUES(3);
+  INSERT INTO carts(user_id) VALUES(4);
+  INSERT INTO carts(user_id) VALUES(5);`;
 
   await client.query(SQL);
 };

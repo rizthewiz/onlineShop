@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [newUser, setNewUser] = useState({
@@ -10,6 +11,7 @@ function Register() {
     address: "",
   });
   const route = "/api/users/register";
+  const nav = useNavigate();
 
   function handleUserChange(e) {
     const { name, value } = e.target;
@@ -25,6 +27,7 @@ function Register() {
         .post(route, newUser)
         .then(function (response) {
           alert("Account Created: Please Log In");
+          nav("/login");
         })
         .catch(function (error) {
           console.log(error);

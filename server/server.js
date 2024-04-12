@@ -17,7 +17,7 @@ const init = async () => {
   await client.connect();
   console.log("connected to db");
 
-  await seed();
+  // await seed();
 
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);

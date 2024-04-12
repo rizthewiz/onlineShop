@@ -39,7 +39,7 @@ const getProducts = async () => {
 const insertUser = async (firstName, lastName, email, password, address) => {
   const SQL = `
       INSERT INTO users(firstName, lastName, email, password, address) VALUES($1, $2, $3, $4, $5)
-      RETURNING firstName, lastName, email, address`;
+      RETURNING firstName, lastName, email, address, id`;
 
   const response = await client.query(SQL, [
     firstName,
@@ -48,7 +48,15 @@ const insertUser = async (firstName, lastName, email, password, address) => {
     await bcrypt.hash(password, 5),
     address,
   ]);
-  console.log(response.rows[0]);
+  return response.rows[0];
+};
+
+const addUserCart = async (id) => {
+  const SQL = `
+  INSERT INTO carts(user_id) VALUES($1)
+  RETURNING *`;
+
+  const response = await client.query(SQL, [id]);
   return response.rows[0];
 };
 
@@ -159,13 +167,30 @@ const updateProduct = async (
 };
 
 const getCartByUserId = async (id) => {
+  console.log(id);
   const SQL = `
   SELECT id FROM carts
   WHERE user_id = $1;`;
 
   const response = await client.query(SQL, [id]);
-  console.log(response.rows[0]);
   return response.rows[0];
+};
+
+const getAllCarts = async () => {
+  const SQL = `
+  SELECT * FROM carts;`;
+
+  const response = await client.query(SQL);
+  return response.rows;
+};
+
+const getItemsByCartId = async (id) => {
+  const SQL = `
+  SELECT * FROM cartItems 
+  WHERE cart_id = $1;`;
+
+  const response = await client.query(SQL, [id]);
+  return response.rows;
 };
 
 const insertCartItem = async (
@@ -209,4 +234,7 @@ module.exports = {
   updateProduct,
   getCartByUserId,
   insertCartItem,
+  addUserCart,
+  getAllCarts,
+  getItemsByCartId,
 };

@@ -31,6 +31,27 @@ router.post("/:id/cart", async (req, res, next) => {
   }
 });
 
+router.get("/carts", async (req, res, next) => {
+  try {
+    const carts = await db.getAllCarts();
+    res.send(carts);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/cart", async (req, res, next) => {
+  try {
+    const cart = await db.getCartByUserId(req.params.id);
+    console.log("cart", cart);
+    // get all items in cart with cart id
+    const items = await db.getItemsByCartId(cart.id);
+    res.send(items);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Admin Route
 router.get("/", async (req, res, next) => {
   try {
@@ -52,7 +73,6 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/register", async (req, res, next) => {
   try {
-    // create cart for user
     const user = await db.insertUser(
       req.body.firstName,
       req.body.lastName,
@@ -60,9 +80,7 @@ router.post("/register", async (req, res, next) => {
       req.body.password,
       req.body.address
     );
-    console.log(req.body);
-    console.log(user);
-    // need to send token
+    await db.addUserCart(user.id);
     res.send(user);
   } catch (error) {
     next(error);
@@ -89,9 +107,9 @@ router.post("/login", async (req, res, next) => {
       throw new Error("Invalid User Credentials");
     }
 
-    const token = await jwt.sign({ id: user.id }, SECRET);
+    const token = jwt.sign({ id: user.id }, SECRET);
     console.log(user);
-    res.send({ token: token, name: user.firstname });
+    res.send({ token: token, name: user.firstname, id: user.id });
   } catch (error) {
     next(error);
   }
