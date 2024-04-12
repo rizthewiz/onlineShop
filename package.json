@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm --prefix ./client/pleasures run build",
     "start:dev": "concurrently \"npm --prefix ./server run dev\" \"npm --prefix ./client/pleasures run dev\""
   },
   "keywords": [],
