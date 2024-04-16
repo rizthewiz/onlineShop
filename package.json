@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm --prefix ./client/pleasures run build",
-    "start:dev": "concurrently \"npm --prefix ./server run dev\" \"npm --prefix ./client/pleasures run dev\""
+    "start:dev": "concurrently \"npm --prefix ./server run dev\" \"npm --prefix ./client/pleasures run dev\"",
+    "start": "npm --prefix ./client/pleasures run build && node ./server/server.js"
   },
   "keywords": [],
   "author": "",
