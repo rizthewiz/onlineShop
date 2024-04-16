@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "npm --prefix ./server install && npm --prefix ./client/pleasures install && npm run --prefix ./client/pleasures build",
     "build": "npm --prefix ./client/pleasures run build",
     "start:dev": "concurrently \"npm --prefix ./server run dev\" \"npm --prefix ./client/pleasures run dev\"",
-    "start": "npm --prefix ./client/pleasures run build && node ./server/server.js"
+    "start": "node ./server/server.js"
   },
   "keywords": [],
   "author": "",
