@@ -3,7 +3,7 @@ const express = require("express");
 const { client } = require("../server/database/index.js");
 const seed = require("../server/database/seed.js");
 const api = require("./api/index.js");
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const app = express();
 app.use(require("morgan")("dev"));
