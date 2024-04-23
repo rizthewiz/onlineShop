@@ -7,6 +7,7 @@ const SECRET = process.env.SECRET || "funny lemon Ops";
 
 const router = express.Router();
 
+// Add items to cart
 router.post("/:id/cart", async (req, res, next) => {
   // get cartid by userid
   try {
@@ -27,6 +28,35 @@ router.post("/:id/cart", async (req, res, next) => {
     );
     res.send(cartItem);
   } catch (error) {
+    next(error);
+  }
+});
+
+// Update items in cart
+router.put("/:id/cart", async (req, res, next) => {
+  // get cartid by userid
+  try {
+    const cart = await db.getCartByUserId(req.params.id);
+    const { product_id, quantity } = req.body;
+    const cartItem = await db.updateCart(product_id, quantity);
+    res.send(cartItem);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Remove from cart
+router.delete("/:id/cart/:product_id", async (req, res, next) => {
+  try {
+    const cart = await db.getCartByUserId(req.params.id);
+    console.log("cart", cart);
+    console.log(req.params.product_id);
+    const item = await db.removeItem(req.params.product_id);
+    console.log(res);
+    res.sendStatus(204);
+    console.log(`Sucessfully Removed Item`);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 });
@@ -93,9 +123,7 @@ router.post("/login", async (req, res, next) => {
     // generate token if matches.
     // send response and token
     const user = await db.getUserByEmail(req.body.email);
-    console.log(user);
     if (!user) {
-      console.log("anything");
       throw new Error("User email does not exist");
     }
     const isMatchingPassword = await bcrypt.compare(
@@ -108,7 +136,6 @@ router.post("/login", async (req, res, next) => {
     }
 
     const token = jwt.sign({ id: user.id }, SECRET);
-    console.log(user);
     res.send({ token: token, name: user.firstname, id: user.id });
   } catch (error) {
     next(error);

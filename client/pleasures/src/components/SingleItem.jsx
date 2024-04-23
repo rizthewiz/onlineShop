@@ -10,8 +10,8 @@ function SingleItem({ id, img, title, price, quantity, description }) {
         <img src={img}></img>
         <p>${price}.00</p>
       </Link>
-      {/* <details>{description}</details> */}
-      {/* {quantity} */}
+      <p>{quantity}</p>
+      <p>{description}</p>
     </div>
   );
 }

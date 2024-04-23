@@ -123,6 +123,15 @@ const removeProduct = async (id) => {
   return true;
 };
 
+const removeItem = async (id) => {
+  const SQL = `
+        DELETE FROM cartItems
+        WHERE product_id = $1`;
+
+  const response = await client.query(SQL, [id]);
+  return true;
+};
+
 const getSingleProduct = async (id) => {
   const SQL = `
     SELECT * FROM products WHERE id = $1;
@@ -163,6 +172,17 @@ const updateProduct = async (
     category_name,
     id,
   ]);
+  return response.rows[0];
+};
+
+// need testing
+const updateCart = async (id, quantity) => {
+  const SQL = `UPDATE cartItems
+  SET quantity=$2
+  WHERE product_id=$1
+  RETURNING *`;
+
+  const response = await client.query(SQL, [id, quantity]);
   return response.rows[0];
 };
 
@@ -213,7 +233,6 @@ const insertCartItem = async (
     image,
     quantity,
   ]);
-  console.log(response.rows);
   return response.rows[0];
 };
 
@@ -230,8 +249,10 @@ module.exports = {
   getSingleProduct,
   removeCategory,
   removeProduct,
+  removeItem,
   updateCategory,
   updateProduct,
+  updateCart,
   getCartByUserId,
   insertCartItem,
   addUserCart,

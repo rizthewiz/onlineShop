@@ -13,6 +13,7 @@ function ItemDetails() {
       try {
         const item = await axios(route);
         selectItem(item.data);
+        console.log(item.data);
       } catch (err) {
         console.error(err);
       }
@@ -26,7 +27,11 @@ function ItemDetails() {
       <img src={item.image}></img>
       <p>${item.price}.00</p>
       <p>{item.description}</p>
-      {/* {quantity} */}
+      {quantity && (
+        <p>
+          Available{token && <button onClick={addToCart}>Add to Cart</button>}
+        </p>
+      )}
     </div>
   );
 }
