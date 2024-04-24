@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function Cart({ user_id }) {
   const [products, setProducts] = useState([]);
-  const [quantity, changeQuantity] = useState();
   const productTracker = products;
   const nav = useNavigate();
 
@@ -12,7 +11,6 @@ function Cart({ user_id }) {
     async function getProducts() {
       try {
         const products = await axios.get(`/api/users/${user_id}/cart`);
-        console.log(products.data);
         setProducts(products.data);
       } catch (err) {
         console.log("Unable to get products!", err);
@@ -29,7 +27,6 @@ function Cart({ user_id }) {
         const selected = prevProducts.find(
           (product) => product.product_id === id
         );
-        console.log(selected);
 
         if (selected) {
           const unselected = products.filter((product) => product != selected);
@@ -47,15 +44,12 @@ function Cart({ user_id }) {
         }),
       });
       const result = await response.json();
-      console.log(result);
     } catch (error) {
       console.log("Issue", error);
     }
   }
 
   async function deleteItem(product_id) {
-    console.log(product_id);
-    console.log("tracker", productTracker);
     try {
       await fetch(`/api/users/${user_id}/cart/${product_id}`, {
         method: "DELETE",
@@ -64,7 +58,6 @@ function Cart({ user_id }) {
       setProducts(
         productTracker.filter((item) => item.product_id != product_id)
       );
-      console.log(products);
     } catch (error) {
       console.log("Issue", error);
     }

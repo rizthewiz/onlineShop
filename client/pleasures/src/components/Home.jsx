@@ -9,7 +9,6 @@ function Home() {
     async function getProducts() {
       try {
         const products = await axios.get("/api/products");
-        console.log(products.data);
         setProducts(products.data);
       } catch (err) {
         console.log("Unable to get products!", err);

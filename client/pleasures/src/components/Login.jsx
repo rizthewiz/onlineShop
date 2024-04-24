@@ -10,7 +10,6 @@ function Login({ setToken, setName, setUser_Id }) {
 
   function handleUserChange(e) {
     const { name, value } = e.target;
-    console.log(name, value);
     setUser((preValue) => {
       return { ...preValue, [name]: value };
     });

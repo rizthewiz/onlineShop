@@ -13,7 +13,6 @@ function ItemDetails({ token, user_id }) {
       try {
         const item = await axios(route);
         selectItem(item.data);
-        console.log(item.data);
       } catch (err) {
         console.error(err);
       }
