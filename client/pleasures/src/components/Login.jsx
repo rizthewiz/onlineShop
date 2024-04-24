@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function Login({ setToken, setName, setId }) {
+function Login({ setToken, setName, setUser_Id }) {
   const [user, setUser] = useState({ email: "", password: "" });
 
   const nav = useNavigate();
@@ -24,9 +24,10 @@ function Login({ setToken, setName, setId }) {
         .then(function (response) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
-          console.log(response.data);
+          localStorage.setItem("name", response.data.name);
           setName(response.data.name);
-          setId(response.data.id);
+          localStorage.setItem("user_id", response.data.id);
+          setUser_Id(response.data.id);
           nav("/");
         })
         .catch(function (error) {

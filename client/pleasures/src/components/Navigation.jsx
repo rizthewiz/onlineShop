@@ -9,9 +9,10 @@ function Navigation({ token, setToken, name }) {
     <div>
       {token && <h2>Welcome, {name}! </h2>}
       <button onClick={() => nav("/")}> Home </button>
-      Other otions here
+
       {token ? (
         <>
+          My Orders
           <button onClick={() => nav("/cart")}>View Cart</button>
           <button
             onClick={() => {

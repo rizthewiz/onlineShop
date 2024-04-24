@@ -52,28 +52,34 @@ const dummyProducts = [
     title: "bullet",
     price: 40,
     quantity: 30,
-    image: "../../client/pleasures/src/assets/ecommerce.png",
+    image:
+      "https://cdn3.vectorstock.com/i/1000x1000/90/92/add-image-icon-editable-outline-vector-30399092.jpg",
     category_id: 2,
   },
   {
     title: "cock ring",
     price: 40,
     quantity: 30,
-    image: "../../client/pleasures/src/assets/ecommerce.png",
+    image:
+      "https://cdn3.vectorstock.com/i/1000x1000/90/92/add-image-icon-editable-outline-vector-30399092.jpg",
+
     category_id: 1,
   },
   {
     title: "strap-on",
     price: 40,
     quantity: 30,
-    image: "../../client/pleasures/src/assets/ecommerce.png",
+    image:
+      "https://cdn3.vectorstock.com/i/1000x1000/90/92/add-image-icon-editable-outline-vector-30399092.jpg",
+
     category_id: 3,
   },
   {
     title: "Truth or Dare",
     price: 40,
     quantity: 30,
-    image: "../client/pleasures/src/assets/ecommerce.png",
+    image:
+      "https://cdn3.vectorstock.com/i/1000x1000/90/92/add-image-icon-editable-outline-vector-30399092.jpg",
     category_id: 5,
   },
 ];

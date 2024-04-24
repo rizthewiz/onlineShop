@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function Cart({ id }) {
-  const [products, setProducts] = useState(null);
+function Cart({ user_id }) {
+  const [products, setProducts] = useState([]);
+  const [quantity, changeQuantity] = useState();
+  const productTracker = products;
+  const nav = useNavigate();
 
   useEffect(() => {
     async function getProducts() {
       try {
-        const products = await axios.get(`/api/users/${id}/cart`);
+        const products = await axios.get(`/api/users/${user_id}/cart`);
         console.log(products.data);
         setProducts(products.data);
       } catch (err) {
@@ -17,20 +21,87 @@ function Cart({ id }) {
     getProducts();
   }, []);
 
+  async function updateQuantity(e, id) {
+    try {
+      console.log(e.target.value);
+
+      setProducts((prevProducts) => {
+        const selected = prevProducts.find(
+          (product) => product.product_id === id
+        );
+        console.log(selected);
+
+        if (selected) {
+          const unselected = products.filter((product) => product != selected);
+          selected.quantity = e.target.value;
+          return [...unselected, selected];
+        }
+      });
+
+      const response = await fetch(`/api/users/${user_id}/cart`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product_id: id,
+          quantity: e.target.value,
+        }),
+      });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log("Issue", error);
+    }
+  }
+
+  async function deleteItem(product_id) {
+    console.log(product_id);
+    console.log("tracker", productTracker);
+    try {
+      await fetch(`/api/users/${user_id}/cart/${product_id}`, {
+        method: "DELETE",
+      });
+
+      setProducts(
+        productTracker.filter((item) => item.product_id != product_id)
+      );
+      console.log(products);
+    } catch (error) {
+      console.log("Issue", error);
+    }
+  }
+
+  async function placeOrder() {
+    nav("/OrderPlaced");
+  }
   return (
     <>
-      Cart
-      {products &&
+      <h2>Cart</h2>
+      {products.length > 0 && <button onClick={placeOrder}>Place order</button>}
+      {products.length > 0 ? (
         products.map((product) => {
           return (
             <>
-              <p>Item {product.product_title}</p>
+              <h3>Item {product.product_title}</h3>
               <p>Price {product.product_price}</p>
               <img src={product.product_image} />
-              <p>Quantity {product.quantity}</p>
+              <label>
+                Quantity
+                <input
+                  type="number"
+                  name="quantity"
+                  value={product.quantity}
+                  onChange={(e) => updateQuantity(e, product.product_id)}
+                />
+              </label>
+              <button onClick={() => deleteItem(product.product_id)}>
+                Remove
+              </button>
             </>
           );
-        })}
+        })
+      ) : (
+        <p>Cart is empty</p>
+      )}
     </>
   );
 }

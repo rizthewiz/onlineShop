@@ -18,6 +18,9 @@ router.post("/:id/cart", async (req, res, next) => {
     //return created cart item in response
     const productInfo = await db.getSingleProduct(product_id);
     console.log(productInfo);
+    // check if product_id in cart
+    // if yes run update quantity
+    // else
     const cartItem = await db.insertCartItem(
       cart.id,
       product_id,
