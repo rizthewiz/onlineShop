@@ -15,7 +15,6 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const product = await db.getSingleProduct(req.params.id);
-    console.log(first);
     res.send(product);
   } catch (error) {
     next(error);
